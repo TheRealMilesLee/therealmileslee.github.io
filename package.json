@@ -5,7 +5,7 @@
   "scripts": {
     "gen:images": "node scripts/generateImageList.js",
     "dev": "next dev --turbopack",
-    "build": "npm run gen:images && next build",
+    "build": "next build && next export",
     "export": "next export",
     "start": "next start",
     "lint": "next lint",
