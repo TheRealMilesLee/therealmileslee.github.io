@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
+    "gen:images": "node scripts/generateImageList.js",
+    "dev": "npm run gen:images && next dev --turbopack",
+    "build": "npm run gen:images && next build",
     "export": "next export",
     "start": "next start",
     "lint": "next lint",

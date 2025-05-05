@@ -4,14 +4,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+// app/photography/page.tsx
+import images from '../../../imageList.json'; // 注意路径
 
-// 你的图片列表
-const images = [
-  "/photography/photo1.jpg",
-  "/photography/photo2.jpg",
-  "/photography/photo3.jpg",
-  // …更多路径
-];
 
 export function NavBar() {
   return (
