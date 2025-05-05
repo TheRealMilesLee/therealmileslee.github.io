@@ -1,73 +1,114 @@
-// app/photography/page.tsx
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-// app/photography/page.tsx
-import images from '../../../imageList.json'; // 注意路径
-
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 
 export function NavBar() {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md text-white flex justify-between items-center p-6">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-zinc-900/70 backdrop-blur-md shadow-md flex justify-between items-center px-6 py-4">
       <div className="flex items-center space-x-3">
         <img
           src="/images/avatar.jpg"
           alt="My Logo"
-          className="w-10 h-10 rounded-full border border-gray-700"
+          className="w-10 h-10 rounded-full border border-gray-300 shadow"
         />
-        <h1 className="text-2xl font-bold">Hengyi Li</h1>
+        <h1 className="text-2xl font-bold text-white">Hengyi Li</h1>
       </div>
-      <ul className="flex space-x-6 text-sm">
-        <li><a href="/" className="hover:text-gray-300">Home</a></li>
-        <li><a href="#projects" className="hover:text-gray-300">Projects</a></li>
-        <li><Link href="/photography" className="hover:text-gray-300">Photography</Link></li>
-        <li><a href="#about" className="hover:text-gray-300">About me</a></li>
-        <li><a href="#contact" className="hover:text-gray-300">Contact</a></li>
+      <ul className="flex space-x-6 text-sm font-medium text-gray-200">
+        <li><a href="/" className="hover:text-white">Home</a></li>
+        <li><a href="/#projects" className="hover:text-white">Projects</a></li>
+        <li><a href="/photography" className="hover:text-white">Photography</a></li>
+        <li><a href="/#about" className="hover:text-white">About me</a></li>
+        <li><a href="/#contact" className="hover:text-white">Contact</a></li>
       </ul>
     </nav>
   );
 }
 
 export default function PhotographyPage() {
-  const [current, setCurrent] = useState(0);
+  const [images, setImages] = useState<string[]>([]);
+  const [selectedImage, setSelectedImage] = useState<string>("");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch("/imageList.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setImages(data);
+        setSelectedImage(data[0]);
+      })
+      .catch((err) => console.error("Failed to load image list:", err));
+  }, []);
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    let scrollSpeed = 1;
+    let intervalId: NodeJS.Timeout;
+
+    const startScroll = () => {
+      intervalId = setInterval(() => {
+        if (!scrollContainer) return;
+        scrollContainer.scrollLeft += scrollSpeed;
+        if (
+          scrollContainer.scrollLeft >=
+          scrollContainer.scrollWidth - scrollContainer.clientWidth
+        ) {
+          scrollContainer.scrollLeft = 0;
+        }
+      }, 20);
+    };
+
+    startScroll();
+    return () => clearInterval(intervalId);
+  }, [images]);
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24">
+    <div className="min-h-screen bg-zinc-950 text-white pt-24">
       <NavBar />
+      <main className="max-w-6xl mx-auto px-6 py-10">
+        <h1 className="text-4xl font-bold mb-10 text-center">Photography</h1>
 
-      <main className="max-w-5xl mx-auto px-6 py-12 flex flex-col items-center">
-        {/* 大图展示区 */}
-        <div className="w-full mb-8">
-          <img
-            src={images[current]}
-            alt={`Photo ${current + 1}`}
-            className="w-full h-auto object-contain rounded-lg shadow-xl"
-          />
-        </div>
+        {selectedImage && (
+          <section className="flex flex-col items-center p-12">
+            <img
+              src={selectedImage}
+              alt="Selected"
+              className="rounded-xl shadow-lg max-h-[80vh] object-contain"
+            />
+            <p className="mt-4 text-gray-400 italic">Some roads are drawn on maps. Others are drawn in will.</p>
+          </section>
+        )}
 
-        {/* 缩略图栏 */}
-        <div className="w-full overflow-x-auto scrollbar-none">
-          <div className="flex space-x-4 pb-2">
-            {images.map((src, idx) => (
-              <div
-                key={idx}
-                onClick={() => setCurrent(idx)}
-                className={`flex-shrink-0 w-24 h-16 rounded-md overflow-hidden cursor-pointer transition-transform ${
-                  idx === current ? "ring-2 ring-white" : "opacity-60 hover:opacity-100"
-                }`}
-              >
-                <img
-                  src={src}
-                  alt={`Thumbnail ${idx + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
+        <section className="py-10">
+          <div
+            ref={scrollRef}
+            className="overflow-x-auto whitespace-nowrap px-6 scrollbar-hide"
+          >
+            <div className="flex space-x-4">
+              {images.map((src, i) => (
+                <ThumbnailCard key={i} src={src} onClick={() => setSelectedImage(src)} />
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
       </main>
+    </div>
+  );
+}
+
+function ThumbnailCard({ src, onClick }: { src: string; onClick: () => void }) {
+  return (
+    <div
+      className="w-64 flex-shrink-0 rounded-2xl shadow hover:shadow-lg transition cursor-pointer overflow-hidden"
+      onClick={onClick}
+    >
+      <img
+        src={src}
+        alt=""
+        className="w-full h-40 object-cover"
+      />
     </div>
   );
 }
