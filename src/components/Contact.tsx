@@ -1,14 +1,4 @@
 "use client"; // if you're using app/ directory in Next.js 13+
-import Image from 'next/image';
-import { useEffect, useRef } from "react";
-import {
-  SiPython, SiCplusplus, SiJavascript, SiGo, SiGnubash, SiMysql,
-  SiDocker, SiKubernetes, SiJenkins, SiLinux, SiApple,
-  SiGithubactions, SiGitlab, SiAnsible, SiMongodb, SiPostgresql,
-  SiNodedotjs, SiReact, SiD3Dotjs, SiSwift, SiJirasoftware, SiConfluence
-} from 'react-icons/si';
-import { IoLogoWechat } from "react-icons/io5";
-import Link from "next/link";
 import { Mail, Phone, Linkedin, Github } from "lucide-react";
 export function ContactFooter()
 {

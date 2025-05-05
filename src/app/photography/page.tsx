@@ -1,10 +1,13 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { NavBar } from "./NavBarPhotagraphy";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from 'next/image';
 
 export default function PhotographyPage() {
   const [images, setImages] = useState<{ imagePath: string, description: string }[]>([]);
   const [selectedImage, setSelectedImage] = useState<{ imagePath: string, description: string } | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -24,6 +27,7 @@ export default function PhotographyPage() {
         if (Array.isArray(data) && data.length > 0) {
           setImages(data);
           setSelectedImage(data[0]);
+          setSelectedIndex(0);
         } else {
           setError("No images found or invalid data format");
         }
@@ -41,7 +45,7 @@ export default function PhotographyPage() {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer || images.length === 0) return;
 
-    let scrollSpeed = 1;
+    const scrollSpeed = 1;
     let intervalId: NodeJS.Timeout;
 
     const startScroll = () => {
@@ -61,8 +65,54 @@ export default function PhotographyPage() {
     return () => clearInterval(intervalId);
   }, [images]);
 
-  // 调试渲染
-  console.log("Rendering with selectedImage:", selectedImage);
+  // Function to navigate to the previous image
+  const goToPrevious = () => {
+    if (images.length === 0) return;
+    const newIndex = selectedIndex <= 0 ? images.length - 1 : selectedIndex - 1;
+    setSelectedIndex(newIndex);
+    setSelectedImage(images[newIndex]);
+    scrollToThumbnail(newIndex);
+  };
+
+  // Function to navigate to the next image
+  const goToNext = () => {
+    if (images.length === 0) return;
+    const newIndex = selectedIndex >= images.length - 1 ? 0 : selectedIndex + 1;
+    setSelectedIndex(newIndex);
+    setSelectedImage(images[newIndex]);
+    scrollToThumbnail(newIndex);
+  };
+
+  // Function to scroll the thumbnail into view
+  const scrollToThumbnail = (index: number) => {
+    if (!scrollRef.current) return;
+
+    const thumbnailWidth = 256; // w-64 = 16rem = 256px
+    const spacing = 16; // space-x-4 = 1rem = 16px
+    const scrollPosition = (thumbnailWidth + spacing) * index;
+
+    scrollRef.current.scrollLeft = scrollPosition - scrollRef.current.clientWidth / 2 + thumbnailWidth / 2;
+  };
+
+  // Select image by index
+  const selectImage = (image: { imagePath: string, description: string }, index: number) => {
+    setSelectedImage(image);
+    setSelectedIndex(index);
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        goToPrevious();
+      } else if (e.key === "ArrowRight") {
+        goToNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedIndex, images]);
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white pt-24">
@@ -85,7 +135,16 @@ export default function PhotographyPage() {
         {!loading && !error && selectedImage && (
           <section className="flex flex-col items-center p-12">
             <div className="relative w-full max-w-4xl">
-              <img
+              {/* Previous Button */}
+              <button
+                onClick={goToPrevious}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full p-2 z-10 transition-all"
+                aria-label="Previous image"
+              >
+                <ChevronLeft size={24} />
+              </button>
+
+              <Image
                 src={selectedImage.imagePath}
                 alt="Selected photograph"
                 className="rounded-xl shadow-lg max-h-[80vh] mx-auto object-contain"
@@ -96,10 +155,22 @@ export default function PhotographyPage() {
                   target.alt = "Image could not be loaded";
                 }}
               />
+
+              {/* Next Button */}
+              <button
+                onClick={goToNext}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full p-2 z-10 transition-all"
+                aria-label="Next image"
+              >
+                <ChevronRight size={24} />
+              </button>
             </div>
             <p className="mt-4 text-gray-400 italic text-center max-w-2xl">
               {selectedImage.description || "No description available"}
             </p>
+            <div className="mt-4 text-sm">
+              <span>{selectedIndex + 1} / {images.length}</span>
+            </div>
           </section>
         )}
 
@@ -115,8 +186,8 @@ export default function PhotographyPage() {
                   <ThumbnailCard
                     key={i}
                     src={image.imagePath}
-                    isSelected={selectedImage?.imagePath === image.imagePath}
-                    onClick={() => setSelectedImage(image)}
+                    isSelected={selectedIndex === i}
+                    onClick={() => selectImage(image, i)}
                   />
                 ))}
               </div>
@@ -144,7 +215,7 @@ function ThumbnailCard({
       onClick={onClick}
     >
       <div className="relative w-full h-40">
-        <img
+        <Image
           src={src}
           alt=""
           className="w-full h-full object-cover"

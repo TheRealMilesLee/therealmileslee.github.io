@@ -1,5 +1,4 @@
 "use client"; // if you're using app/ directory in Next.js 13+
-import Image from 'next/image';
 import { useEffect, useRef } from "react";
 import {
   SiPython, SiCplusplus, SiJavascript, SiGo, SiGnubash, SiMysql,
@@ -7,9 +6,6 @@ import {
   SiGithubactions, SiGitlab, SiAnsible, SiMongodb, SiPostgresql,
   SiNodedotjs, SiReact, SiD3Dotjs, SiSwift, SiJirasoftware, SiConfluence
 } from 'react-icons/si';
-import { IoLogoWechat } from "react-icons/io5";
-import Link from "next/link";
-import { Mail, Phone, Linkedin, Github } from "lucide-react";
 const skills = [
   { name: "Python", icon: SiPython },
   { name: "C++", icon: SiCplusplus },
@@ -42,7 +38,7 @@ export function TechStackSection()
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
-    let scrollSpeed = 1; // px per tick
+    const scrollSpeed = 1; // px per tick
     let intervalId: NodeJS.Timeout;
 
     const startScroll = () => {
