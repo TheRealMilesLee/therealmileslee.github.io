@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 
@@ -26,8 +24,8 @@ export function NavBar() {
 }
 
 export default function PhotographyPage() {
-  const [images, setImages] = useState<string[]>([]);
-  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [images, setImages] = useState<{ imagePath: string, description: string }[]>([]);
+  const [selectedImage, setSelectedImage] = useState<{ imagePath: string, description: string }>({ imagePath: "", description: "" });
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,7 +33,7 @@ export default function PhotographyPage() {
       .then((res) => res.json())
       .then((data) => {
         setImages(data);
-        setSelectedImage(data[0]);
+        setSelectedImage(data[0]);  // 默认选中第一张图片
       })
       .catch((err) => console.error("Failed to load image list:", err));
   }, []);
@@ -70,14 +68,14 @@ export default function PhotographyPage() {
       <main className="max-w-6xl mx-auto px-6 py-10">
         <h1 className="text-4xl font-bold mb-10 text-center">Photography</h1>
 
-        {selectedImage && (
+        {selectedImage.imagePath && (
           <section className="flex flex-col items-center p-12">
             <img
-              src={selectedImage}
+              src={selectedImage.imagePath}
               alt="Selected"
               className="rounded-xl shadow-lg max-h-[80vh] object-contain"
             />
-            <p className="mt-4 text-gray-400 italic">Some roads are drawn on maps. Others are drawn in will.</p>
+            <p className="mt-4 text-gray-400 italic">{selectedImage.description}</p>
           </section>
         )}
 
@@ -87,8 +85,12 @@ export default function PhotographyPage() {
             className="overflow-x-auto whitespace-nowrap px-6 scrollbar-hide"
           >
             <div className="flex space-x-4">
-              {images.map((src, i) => (
-                <ThumbnailCard key={i} src={src} onClick={() => setSelectedImage(src)} />
+              {images.map((image, i) => (
+                <ThumbnailCard
+                  key={i}
+                  src={image.imagePath}
+                  onClick={() => setSelectedImage(image)}
+                />
               ))}
             </div>
           </div>
