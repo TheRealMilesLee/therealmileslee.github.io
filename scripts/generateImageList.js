@@ -32,7 +32,7 @@ const generateImageDescriptions = async () =>
       // 为 Ollama 准备提示词 - 使用 llava 或其他支持图像的模型
       const payload = {
         model: "gemma3:12b",  // 或其他支持图像分析的模型，如 llava:13b
-        prompt: "Generate a poetic description for this image in English. Focus on emotions, atmosphere and artistic elements:",
+        prompt: "Create a poetic image description in exactly 20 words or less. Capture the essence, emotion and soul of this moment with lyrical language:",
         stream: false,
         images: [fs.readFileSync(image.path, { encoding: 'base64' })]
       };

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "gen:images": "node scripts/generateImageList.js",
-    "dev": "npm run gen:images && next dev --turbopack",
+    "dev": "next dev --turbopack",
     "build": "npm run gen:images && next build",
     "export": "next export",
     "start": "next start",
