@@ -1,16 +1,16 @@
-"use client"; // if you're using app/ directory in Next.js 13+
+"use client";
 import Image from 'next/image';
 import { TechStackSection } from '@/components/techStack';
 import { NavBar } from '@/components/NavBar';
-import { ProjectsSection } from '@/components/Projects'
+import { ProjectsSection } from '@/components/Projects';
 import { AboutMe } from '@/components/About';
 import { ContactFooter } from '@/components/Contact';
 
 export default function Home() {
   return (
     <main className="bg-white text-gray-900 pt-24">
-      {/* Navbar */ }
-      { NavBar() }
+      {/* Navbar */}
+      <NavBar />
 
       <div id="top" />
 
@@ -27,16 +27,16 @@ export default function Home() {
       </section>
 
       {/* Tech Stack Gallery */}
-      { TechStackSection() }
+      <TechStackSection />
 
-      {/* Projects section */ }
-      { ProjectsSection() }
+      {/* Projects section */}
+      <ProjectsSection />
 
-      {/* About me section */ }
-      { AboutMe() }
+      {/* About me section */}
+      <AboutMe />
 
-      {/* Contact */ }
-      {ContactFooter()}
+      {/* Contact */}
+      <ContactFooter />
     </main>
   );
 }
