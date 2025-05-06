@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# therealmileslee.github.io
 
-## Getting Started
+🚗 **Personal Portfolio** of Miles Lee — a blend of system engineering, aesthetics, and intentional design.
+📸 Photography, 📂 Projects, 🛠️ Tech Stack, and more.
 
-First, run the development server:
+> "Some roads are drawn on maps. Others are drawn in will."
+
+---
+
+## 🧰 Tech Stack
+
+- **Next.js 15 (App Router)**
+- **TypeScript**
+- **Tailwind CSS**
+- **Static Export (`output: export`)**
+- **GitHub Pages Deployment via GitHub Actions**
+
+---
+
+## 📂 Project Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+.
+├── public/              # Static assets
+│   └── images/
+├── src/
+│   ├── app/             # Next.js App Router pages
+│   │   ├── page.tsx     # Home page
+│   │   └── photography/ # Photo gallery
+│   └── components/      # Reusable React components
+├── next.config.ts       # Static export config for GitHub Pages
+├── tsconfig.json
+└── .github/workflows/   # GitHub Actions for deployment
 ```
+# 🚀 Deployment (GitHub Pages)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+项目会在每次 master 分支的 push 自动构建并部署：
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Static export is enabled via:
+```js
+output: 'export'
+```
+Custom basePath and assetPrefix for GitHub Pages:
+```js
+    basePath: '/therealmileslee.github.io'
+    assetPrefix: '/therealmileslee.github.io/'
+```
+    Deployment via GitHub Actions:
+        GitHub Actions workflow in .github/workflows/deploy.yml
+        Uses actions/deploy-pages@v4 to publish
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# 🧪 Local Development
 
-## Learn More
+## Install dependencies
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+## Run dev server
+npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Build & export
+npm run build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Build artifacts will be output to out/.
+📷 Photography Credits
 
-## Deploy on Vercel
+All photography is original work by Miles Lee.
+Please do not reproduce without permission.
+📝 License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+MIT License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🛰️ Designed to be minimal, intentional, and fast. A portfolio that reflects a system's soul.
