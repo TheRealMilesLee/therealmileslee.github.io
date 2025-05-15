@@ -145,6 +145,8 @@ export default function PhotographyPage() {
               </button>
 
               <Image
+                width={ 1366 }
+                height={768}
                 src={selectedImage.imagePath}
                 alt="Selected photograph"
                 className="rounded-xl shadow-lg max-h-[80vh] mx-auto object-contain"
@@ -216,6 +218,8 @@ function ThumbnailCard({
     >
       <div className="relative w-full h-40">
         <Image
+          width={ 1024 }
+          height={1024}
           src={src}
           alt=""
           className="w-full h-full object-cover"

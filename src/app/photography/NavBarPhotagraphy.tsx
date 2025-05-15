@@ -1,13 +1,14 @@
 "use client";
-
-import { Link } from "lucide-react";
 import Image from 'next/image';
+import Link from "next/link";
 
 export function NavBar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-zinc-900/70 backdrop-blur-md shadow-md flex justify-between items-center px-6 py-4">
       <div className="flex items-center space-x-3">
         <Image
+          width={ 128 }
+          height={128}
           src="/images/avatar.jpg"
           alt="My Logo"
           className="w-10 h-10 rounded-full border border-gray-300 shadow"
@@ -21,6 +22,7 @@ export function NavBar() {
         <li><Link href="/#about" className="hover:text-white">About me</Link></li>
         <li><Link href="/#contact" className="hover:text-white">Contact</Link></li>
       </ul>
+
     </nav>
   );
 }

@@ -8,6 +8,8 @@ export function AboutMe()
         {/* Left: Avatar */}
         <div className="flex justify-center">
           <Image
+            width={ 128 }
+            height={128}
             src="/images/hengyi-avatar.jpg"
             alt="Hengyi Li"
             className="w-48 h-48 md:w-56 md:h-56 object-cover rounded-full shadow-xl"

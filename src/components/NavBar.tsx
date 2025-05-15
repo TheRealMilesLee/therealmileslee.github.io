@@ -7,6 +7,8 @@ export function NavBar()
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/55 backdrop-blur-xl shadow-md flex justify-between items-center p-6">
       <div className="flex items-center space-x-3">
         <Image
+          width={ 128 }
+          height={128}
           src="/images/avatar.jpg"
           alt="My Logo"
           className="w-10 h-10 rounded-full border border-gray-300 shadow"
