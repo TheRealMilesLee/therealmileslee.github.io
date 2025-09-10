@@ -24,13 +24,14 @@ RUN npm install --omit=dev
 # 拷贝构建产物和必要文件
 COPY --from=builder /usr/src/app/.next ./.next
 COPY --from=builder /usr/src/app/public ./public
-COPY --from=builder /usr/src/app/next.config.js ./next.config.js
+COPY --from=builder /usr/src/app/next.config.ts ./next.config.ts
 COPY --from=builder /usr/src/app/package*.json ./
 
 # 如果你用 Tailwind 或其他配置文件，也要一起拷贝
 COPY --from=builder /usr/src/app/tailwind.config.js ./tailwind.config.js
-COPY --from=builder /usr/src/app/postcss.config.js ./postcss.config.js
-
+COPY --from=builder /usr/src/app/postcss.config.mjs ./postcss.config.mjs
+COPY --from=builder /usr/src/app/eslint.config.mjs ./eslint.config.mjs
+COPY --from=builder /usr/src/app/tsconfig.json ./tsconfig.json
 # 暴露端口
 EXPOSE 3000
 
