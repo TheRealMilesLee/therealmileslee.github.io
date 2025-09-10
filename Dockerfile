@@ -34,4 +34,4 @@ COPY --from=builder /usr/src/app/tailwind.config.js ./tailwind.config.js
 COPY --from=builder /usr/src/app/postcss.config.mjs ./postcss.config.mjs
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npx", "serve@latest out"]
