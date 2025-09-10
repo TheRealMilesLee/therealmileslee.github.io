@@ -23,15 +23,8 @@ ENV NODE_ENV=production
 COPY package*.json ./
 RUN npm install --omit=dev
 
-# 拷贝构建产物和必要文件
-COPY --from=builder /usr/src/app/.next ./.next
-COPY --from=builder /usr/src/app/public ./public
-COPY --from=builder /usr/src/app/package*.json ./
-COPY --from=builder /usr/src/app/next.config.ts ./next.config.ts
-
-# 如果有 Tailwind / PostCSS 配置文件，最好也一起带上
-COPY --from=builder /usr/src/app/tailwind.config.js ./tailwind.config.js
-COPY --from=builder /usr/src/app/postcss.config.mjs ./postcss.config.mjs
+# 拷贝整个项目目录，防止遗漏
+COPY --from=builder /usr/src/app /usr/src/app
 EXPOSE 3000
 
 CMD ["npm", "run", "dev"]
