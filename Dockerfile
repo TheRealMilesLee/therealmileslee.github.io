@@ -1,18 +1,38 @@
-FROM node:trixie
+# -------- Stage 1: Build --------
+FROM node:trixie AS builder
 
-# 在容器里建立工作目录
 WORKDIR /usr/src/app
 
-# 先拷贝 package.json 和 package-lock.json,用于安装依赖
+# 拷贝依赖文件并安装
 COPY package*.json ./
+RUN npm install
 
-RUN npm install --production
-
-# 再拷贝项目源代码
+# 拷贝源代码并执行构建
 COPY . .
+RUN npm run build
 
-# 容器启动命令
-CMD ["npm", "start"]
+# -------- Stage 2: Runtime --------
+FROM node:trixie AS runner
 
-# 项目监听的端口
+WORKDIR /usr/src/app
+ENV NODE_ENV=production
+
+# 只安装生产依赖（减少镜像体积）
+COPY package*.json ./
+RUN npm install --omit=dev
+
+# 拷贝构建产物和必要文件
+COPY --from=builder /usr/src/app/.next ./.next
+COPY --from=builder /usr/src/app/public ./public
+COPY --from=builder /usr/src/app/next.config.js ./next.config.js
+COPY --from=builder /usr/src/app/package*.json ./
+
+# 如果你用 Tailwind 或其他配置文件，也要一起拷贝
+COPY --from=builder /usr/src/app/tailwind.config.js ./tailwind.config.js
+COPY --from=builder /usr/src/app/postcss.config.js ./postcss.config.js
+
+# 暴露端口
 EXPOSE 3000
+
+# 启动生产环境
+CMD ["npm", "start"]
